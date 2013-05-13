@@ -11,11 +11,11 @@ class ActiveModel::Validations::EmailValidatorTest < ActiveSupport::TestCase
     @validator = ActiveModel::Validations::EmailValidator.new attributes: :email
   end
 
-  test "add error when contains hash" do
-    @model.email = 'chu#ck@testa.com'
+  test "add error when contains multiple addresses" do
+    @model.email = 'chuck@testa.com, charlie@testa.com'
     @validator.validate @model
 
-    refute_nil @model.errors[:email]
+    refute_empty @model.errors[:email]
   end
 
   test "add error when contains only one TLD" do

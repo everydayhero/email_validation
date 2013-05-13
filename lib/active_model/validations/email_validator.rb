@@ -6,8 +6,9 @@ module ActiveModel
     class EmailValidator < ActiveModel::EachValidator
       def validate_each record, attr, value
         begin
-          tree = Mail::AddressList.new(value).address_nodes.first
-          valid = tree.respond_to?(:local_part) && tree.respond_to?(:domain) && tree.domain.dot_atom_text.elements.size > 1
+          nodes = Mail::AddressList.new(value).address_nodes
+          tree = nodes.first
+          valid = nodes.size == 1 && tree.respond_to?(:local_part) && tree.respond_to?(:domain) && tree.domain.dot_atom_text.elements.size > 1
         rescue Mail::Field::ParseError => err
           valid = false
         end
